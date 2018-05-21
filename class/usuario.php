@@ -1,6 +1,6 @@
 <?php
 
-class Usuarios{
+class Usuario{
 
 	private $idusuario;
 	private $deslogin;
@@ -45,15 +45,49 @@ class Usuarios{
 
 	public function loadById($id){
 
-		$sql =  new Sql();
+		$sql = new Sql();
 
-		$results =  $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID", array(
-
+		$results = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID", array(
 			":ID"=>$id
 		));
 
+		if (count($results) > 0) {
 
-		if (count($results) > 0){
+			$this->setData($results[0]);
+
+		}
+
+	}
+
+	public static function getList(){
+
+		$sql =  new Sql();
+
+		return $sql->select("SELECT * FROM tb_usuarios ORDER BY deslogin");
+
+	}
+
+	public static function search($login){
+
+		$sql = new Sql ();
+
+		return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDER BY deslogin",array(
+
+			':SEARCH'=>"%".$login."%"	
+
+		));
+	}
+
+	public function login($login, $passaword){
+
+$sql = new Sql();
+
+		$results = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin  = :LOGIN AND dessenha = :PASSWORD", array(
+			":LOGIN"=>$login,
+			"PASSWORD"=>$passaword
+		));
+
+		if (count($results) > 0) {
 
 			$row = $results[0];
 
@@ -61,8 +95,14 @@ class Usuarios{
 			$this->setDeslogin($row['deslogin']);
 			$this->setDessenha($row['dessenha']);
 			$this->setDtcadastro(new DateTime($row['dtcadastro']));
-		}
-}
+
+		} else {
+
+			throw new Exception("Login ou senha invalidos.");
+
+		} 
+
+	}
 
 	public function __toString(){
 
@@ -77,7 +117,5 @@ class Usuarios{
 	}
 
 }
-
-
 
 ?>
