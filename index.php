@@ -27,7 +27,25 @@ echo json_encode($search);
 */
 
 //Carrega um usuário usando o login ou senha 
+/*
 $usuario = new Usuario();
 $usuario->login("matheusd3", "Psw@1308");
 echo $usuario;
+*/
+//Inset usuario
+/*
+$aluno = new Usuario("aluno2", "@luno22");
+
+$aluno->insert();
+
+echo $aluno;
+*/
+$usuario = new Usuario();
+
+$usuario->loadById(14);
+
+$usuario->update("professor", "PRogeee");
+
+echo $usuario;
+
 ?>
